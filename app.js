@@ -16,11 +16,11 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-app.use("/", router);
+app.use("/v1", router);
 
 app.use((req, res) => {
     res.json({
-        errors: {
+        __sveltets_2_ensureRightProps: {
             msg: "Hmm.. route dosen't exist."
         }
     }).status(404);
