@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: "mariadb:10.11.6"
+    container_name: "mariadb"
+    working_dir: "/docker-entrypoint-initdb.d"
+    volumes:
+      - ./db/:/docker-entrypoint-initdb.d
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+    healthcheck: # TODO check more in detail what healthcheck times does (start_period, interval etc.)
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: 
+        "always"
+
+  server: # Not adding image-name here because it is local
+    container_name: "server"
+    build: "."
+    working_dir: "/express/"
+    volumes:
+      - "./src/:/express/src"
+      - "./app.js:/express/app.js"
+      - "./package.json:/express/package.json"
+      - "./package-lock.json:/express/package-lock.json"
+    ports:
+      - "1337:1337"
+    command: npm run dev
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart:
+        "on-failure"

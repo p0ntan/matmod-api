@@ -18,4 +18,12 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 app.use("/", router);
 
+app.use((req, res) => {
+    res.json({
+        errors: {
+            msg: "Hmm.. route dosen't exist."
+        }
+    }).status(404);
+});
+
 app.listen(port, console.log(`App is listening on ${port}`));
