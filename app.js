@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
-const port = 1337;
+const port = process.env.PORT || 1337;
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = require('./src/routes/index');
@@ -20,7 +22,7 @@ app.use("/v1", router);
 
 app.use((req, res) => {
     res.json({
-        __sveltets_2_ensureRightProps: {
+        errors: {
             msg: "Hmm.. route dosen't exist."
         }
     }).status(404);

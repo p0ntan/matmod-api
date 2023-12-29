@@ -23,6 +23,7 @@ services:
     build: "."
     working_dir: "/express/"
     volumes:
+      - "./.env:/express/.env"
       - "./src/:/express/src"
       - "./app.js:/express/app.js"
       - "./package.json:/express/package.json"

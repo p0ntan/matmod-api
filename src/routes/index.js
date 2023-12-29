@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const dbHandler = require('../db/index');
+const dataRouter = require('./data');
+const dayRouter = require('./day');
 
 router.get('/', (req, res) => {
     res.json({
@@ -10,28 +11,7 @@ router.get('/', (req, res) => {
     });
 })
 
-router.get('/data', async (req, res) => {
-    result = await dbHandler.getData(dbHandler.queries.allData);
-
-    res.json(result[0])
-})
-
-router.get('/data/daily', async (req, res) => {
-    result = await dbHandler.getData(dbHandler.queries.dailyData);
-
-    res.json(result[0])
-})
-
-router.get('/data/weekly', async (req, res) => {
-    result = await dbHandler.getData(dbHandler.queries.weeklyData);
-
-    res.json(result[0])
-})
-
-router.get('/data/monthly', async (req, res) => {
-    result = await dbHandler.getData(dbHandler.queries.monthlyData);
-
-    res.json(result[0])
-})
+router.use('/data', dataRouter);
+router.use('/day', dayRouter);
 
 module.exports = router;

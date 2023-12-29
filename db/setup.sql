@@ -10,6 +10,7 @@ USE `lent_weather`;
 --
 
 DROP TABLE IF EXISTS `tosse_datapoint`;
+DROP TABLE IF EXISTS `sunne_datapoint`;
 
 CREATE TABLE `tosse_datapoint`(
     `date_time` DATETIME NOT NULL,
@@ -18,6 +19,14 @@ CREATE TABLE `tosse_datapoint`(
     `wind_gust_ms` DECIMAL(3,1) NOT NULL,
     `wind_direction_deg` INT NOT NULL,
     `pressure_hpa` DECIMAL(5,1) NOT NULL,
+
+    PRIMARY KEY (`date_time`)
+);
+
+CREATE TABLE `sunne_datapoint`(
+    `date_time` DATETIME NOT NULL,
+    `humidity` INT,
+    `cloudbase_low` INT,
 
     PRIMARY KEY (`date_time`)
 );
@@ -48,6 +57,20 @@ LINES
 IGNORE 1 LINES
 (date_time, temp, wind_speed_ms, wind_gust_ms, wind_direction_deg, pressure_hpa)
 ;
+
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/sunne_a.csv'
+INTO TABLE `sunne_datapoint`
+CHARSET utf8
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES
+(date_time, humidity, cloudbase_low)
+;
+
+SHOW WARNINGS;
 
 --
 -- Create a view to filter unwanted data
@@ -121,6 +144,25 @@ BEGIN
         `tosse_filtered`
     GROUP BY 
         YEAR(`date_time`), MONTH(`date_time`);
+END;;
+
+--
+-- Procedure for getting data
+--
+CREATE PROCEDURE get_data_single_day(
+    `p_day` DATE
+)
+BEGIN
+    SELECT
+        `tf`.*,
+        `sd`.`humidity`,
+        `sd`.`cloudbase_low`
+    FROM `tosse_filtered` AS `tf`
+    JOIN 
+        `sunne_datapoint` AS `sd`
+    ON `tf`.`date_time` = `sd`.`date_time`
+    WHERE
+        DATE(`tf`.`date_time`) = `p_day`;
 END;;
 
 DELIMITER ;
