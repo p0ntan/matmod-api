@@ -27,6 +27,9 @@ async def fetch_daily_data(event):
     
     data = await request_data(date)
 
+    if len(data) == 0:
+        return
+
     into_output("selected-date", date)
     make_plots(data)
 
