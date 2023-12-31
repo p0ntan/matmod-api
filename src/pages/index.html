@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
+    <title>Väderdata</title>
+</head>
+<style>
+    .chart-wrapper {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .chart-wrapper > div {
+        width: 50%;
+    }
+
+    .chart-wrapper img {
+        width: 100%;
+    }
+
+    .date-text {
+        text-align: center;
+        font-size: 3rem;
+        margin: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+        .chart-wrapper > div {
+            width: 100%;
+        }
+    }
+</style>
+
+<body>
+    <h1>Testa hämta lite väderdata</h1>
+
+    <form onsubmit="return false">
+        <label for="date">Välj datum:</label>
+        <input type="date" id="date" required>
+        <input py-click="fetch_daily_data" type="submit" id="btn-form" value="Hämta data">
+    </form>
+
+    <p class="date-text" id="selected-date"></p>
+
+    <div class="chart-wrapper" id="chart-wrapper">
+        <div id="temp"></div>
+        <div id="wind"></div>
+        <div id="wind_dir"></div>
+        <div id="pressure_hpa"></div>
+        <div id="humidity"></div>
+    </div>
+
+    <script type="py" src="./main.py" config="./pyscript.json"></script>
+</body>
+</html>

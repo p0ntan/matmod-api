@@ -1,8 +1,8 @@
 const mariadb = require('mariadb');
 
 const pool = mariadb.createPool({
-    // socketPath: '/var/lib/mysql/mysql.sock',
-    host: process.env.DB_HOST,
+    socketPath: '/var/lib/mysql/mysql.sock',
+    // host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: 'lent_weather',

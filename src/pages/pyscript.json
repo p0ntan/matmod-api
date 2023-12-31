@@ -1,0 +1,3 @@
+{
+    "packages": ["pandas", "pyodide.http", "matplotlib"]
+}
