@@ -77,6 +77,7 @@ def plot(df, for_y, for_x, id):
     ax.set(xlabel=for_x, ylabel=for_y, title=for_y)
 
     display(fig, target=id)
+    plt.close(fig)
 
 def wind_plot(df, wind, gusts, for_x, id):
     fig, ax = plt.subplots()
@@ -90,6 +91,7 @@ def wind_plot(df, wind, gusts, for_x, id):
     plt.legend([wind, gusts])
 
     display(fig, target=id)
+    plt.close(fig)
 
 async def request_data(date):
     # Inhämtning och sortering/filtrering av data
